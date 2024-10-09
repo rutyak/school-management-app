@@ -24,10 +24,8 @@ const createController = (model) => {
 
     try {
 
-      console.log("................formdata in backend",req.body)
       // let imageFile;
 
-      // console.log("fiel in controller... photo.....", photo)
 
       // if (req.file) {
       //   // Upload the image to Cloudinary

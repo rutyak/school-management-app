@@ -12,8 +12,16 @@ const app = express();
 const port = process.env.PORT;
 const url = process.env.MongoDB_URL;
 
+
+const corsOptions = {
+  origin: 'http://localhost:3000', 
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  credentials: true,  
+  allowedHeaders: ['Content-Type', 'Authorization'],  
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors());
 
 mongoose
   .connect(url)
@@ -21,12 +29,14 @@ mongoose
     console.log("mongodb connection established...");
   })
   .catch((error) => {
-    console.error("error in connection...");
+    console.error("error in connection...", error);
   });
+
+app.options('*', cors());
 
 app.use(classRouter);
 app.use(teacherRouter);
-app.use(studentRouter); 
+app.use(studentRouter);
 app.use(userAuthRouter);
 
 app.listen(port, () => {

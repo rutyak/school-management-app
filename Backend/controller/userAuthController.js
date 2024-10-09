@@ -1,5 +1,6 @@
 const User = require("../model/UserSchema");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const userCreateController = async (req, res) =>{
 
@@ -8,7 +9,9 @@ const userCreateController = async (req, res) =>{
             const user = await User.findOne({email});
 
             if(user && await bcrypt.compare(password, user.password)){
-                res.status(200).json({message: "Login successfull"});
+                const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, { expiresIn: '1h'});
+
+                res.status(200).json({message: "Login successfull", token});
             } else{
                 res.status(401).json({message: "Invalid credentials"});
             }
