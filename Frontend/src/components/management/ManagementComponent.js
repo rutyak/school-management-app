@@ -24,7 +24,7 @@ const ManagementComponent = ({
 }) => {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
-  const [itemId, setItemId] = useState(null);
+  const [itemId, setItemId] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(formTemplate);
@@ -149,7 +149,7 @@ const ManagementComponent = ({
         return;
       }
       setIsFormVisible(false);
-      await axios.put(`${apiEndpoints.update}/${id}`, formData);
+      await axios.put(`${apiEndpoints.update}/${itemId}`, formData);
       toast.success(`${type} edited successfully!`);
       await getData();
     } catch (error) {
@@ -161,6 +161,7 @@ const ManagementComponent = ({
 
   const handleDelete = async (id) => {
     try {
+    
       await axios.delete(`${apiEndpoints.delete}/${id}`);
       toast.success(`${type} deleted successfully!`);
       await getData();
@@ -200,6 +201,8 @@ const ManagementComponent = ({
   });
 
   function handleItemClick(id, className, teacherName) {
+    console.log("id in conainer class id: ", id);
+    setItemId(id);
     setNewClassName({ className, teacher: teacherName });
     const filtered = data?.filter((item) => item._id === id);
     setFilteredItem(filtered);
@@ -227,6 +230,12 @@ const ManagementComponent = ({
             teacherName={newClassName?.teacher}
             handleEditSubmit={handleEditSubmit}
             handleDelete={handleDelete}
+            // editMode={editMode}
+            setEditMode={setEditMode}
+            setIsFormVisible={setIsFormVisible}
+            setFormData={setFormData}
+            setItemId={setItemId}
+            itemId={itemId}
           />
         );
 
@@ -236,11 +245,15 @@ const ManagementComponent = ({
             filteredItem={filteredItem}
             handleEditSubmit={handleEditSubmit}
             handleDelete={handleDelete}
+            setEditMode={setEditMode}
+            setIsFormVisible={setIsFormVisible}
+            setFormData={setFormData}
+            setItemId={setItemId}
           />
         );
     }
   };
-
+  
   return (
     <div className="w-full h-[calc(85%+4px)] flex gap-5 items-center justify-center mobile:flex-col mobile:w-full mobile:h-auto mobile:gap-5 lg:flex-row lg:gap-3 lg:w-full lg:h-[calc(85%+10px)] xl:gap-5 xl:h-[calc(85%+4px)]">
       <div className="student-list w-[calc(38% + 6px)] p-1 h-full border rounded-xl bg-white mobile:w-full lg:w-[45%] xl:w-[calc(45%+16px)]">

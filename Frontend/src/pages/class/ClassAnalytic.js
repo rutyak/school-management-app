@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import axios from "axios";
 import StudentChart from "../../components/StudentChart";
-import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { FaRegEdit } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
@@ -12,14 +11,16 @@ const Base_url = process.env.REACT_APP_BACKEND_URL;
 const ClassAnalytic = ({
   className,
   teacherName,
-  handleEditSubmit,
   handleDelete,
+  setEditMode,
+  setIsFormVisible,
+  setItemId,
+  itemId
 }) => {
   const [data, setData] = useState([]);
   const [columns, setColumns] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [itemId, setItemId] = useState();
 
   const keyMapping = {
     name: "Name",
@@ -57,17 +58,28 @@ const ClassAnalytic = ({
     label: keyMapping[col] || col.charAt(0).toUpperCase() + col.slice(1),
   }));
 
-  const handleStudentDelete = async (id) => {
-    try {
-      setItemId(id);
-      await axios.delete(`${Base_url}/delete/student/${id}`);
-      toast.success(`Student deleted successfully!`);
-      await getData();
-    } catch (error) {
-      toast.error(`Cannot delete student!`);
-      console.error("Error deleting item:", error);
-    }
-  };
+  // const handleStudentDelete = async (id) => {
+  //   try {
+  //     // setItemId(id);
+  //     await axios.delete(`${Base_url}/delete/student/${id}`);
+  //     toast.success(`Student deleted successfully!`);
+  //     await getData();
+  //   } catch (error) {
+  //     toast.error(`Cannot delete student!`);
+  //     console.error("Error deleting item:", error);
+  //   }
+  // };
+
+  async function handleEditData(id) {
+    console.log("id: ", id);
+    setItemId(id)
+    setIsFormVisible(true);
+    setEditMode(true);
+
+    // const filteredData = await axios.get(`${Base_url}/fetch/class/${id}`);
+    // console.log("filteredData: ", filteredData);
+    // setFormData(filteredData);
+  }
 
   return (
     <div className="h-[100%] overflow-auto scrollbar bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -88,9 +100,10 @@ const ClassAnalytic = ({
           Student List
           <div className="flex gap-4 items-center">
             <FaRegEdit
-              className="text-4xl text-blue-400 hover:bg-gray-200 hover:text-blue-600 p-2 rounded-xl transition-all duration-300 ease-in-out shadow-lg hover:scale-110"
-              onClick={(e) => handleEditSubmit(e, itemId)}
+              className="text-4xl text-blue-400 hover:bg-gray-200 hover:text-blue-800 p-2 rounded-xl transition-all duration-300 ease-in-out shadow-lg hover:scale-110"
+              onClick={() => handleEditData(itemId)}
             />
+            {console.log("itemId in classAnalytics container")}
             <MdDeleteOutline
               className="text-4xl text-red-600 hover:bg-gray-200 hover:text-red-800 p-2 rounded-xl transition-all duration-300 ease-in-out shadow-lg hover:scale-110"
               onClick={(e) => handleDelete(itemId)}
@@ -109,11 +122,10 @@ const ClassAnalytic = ({
                 type="StudentList"
                 data={filteredData}
                 headers={headers}
-                handleDelete={handleStudentDelete}
+                // handleDelete={handleStudentDelete}
                 className="table-auto w-full text-left border-collapse pointer-events-none"
               />
             </div>
-
             <StudentChart data={filteredData} />
           </>
         )}
