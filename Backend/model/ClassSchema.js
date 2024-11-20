@@ -5,12 +5,13 @@ const ClassSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        default: "-"
+        unique: true,
     },
     teacher:{
         type: String,
         required: true,
         trim: true,
+        unique: true,
         default: "-"
     },
     classlimit: {
