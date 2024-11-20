@@ -7,7 +7,6 @@ const userAuthController = async (req, res) =>{
         try {
             const {email, password} = req.body;
 
-            
             const user = await User.findOne({email});
 
             if(user && await bcrypt.compare(password, user.password)){
