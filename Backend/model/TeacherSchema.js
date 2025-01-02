@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const TeacherSchema = new mongoose.Schema({
-  // photo: {
-  //   type: String,
-  //   required: true,
-  // },
   name: {
     type: String,
     required: true,
