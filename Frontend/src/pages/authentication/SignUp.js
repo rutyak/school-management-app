@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import InputPassword from "../../components/InputPassword";
 const Base_url = process.env.REACT_APP_BACKEND_URL;
@@ -81,14 +81,14 @@ const SignUp = () => {
         <InputPassword
           name="password"
           type="password"
-          placeholder="Enter password"
+          placeholder="Enter Password"
           state={password}
           setPassword={setPassword}
         />
         <InputPassword
           name="confirmPassword"
           type="password"
-          placeholder="New Confirm Password"
+          placeholder="Confirm Password"
           state={confirmPassword}
           setPassword={setConfirmPassword}
         />
